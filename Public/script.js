@@ -221,6 +221,7 @@ async function exitVehicle(entryId) {
             // Update bill content
             document.getElementById('billContent').innerHTML = `
                 <div class="bill-details p-3">
+                    <h1 text-allign:center>QuickPark</h1>
                     <h4 class="text-center mb-4">Parking Bill</h4>
                     <div class="border-bottom mb-3">
                         <p><strong>Car Number:</strong> ${bill.car_number}</p>
@@ -256,15 +257,31 @@ async function exitVehicle(entryId) {
 // Print bill
 document.getElementById('printBill').addEventListener('click', () => {
     const printContents = document.getElementById('billContent').innerHTML;
-    const originalContents = document.body.innerHTML;
-
-    document.body.innerHTML = printContents;
-    window.print();
-    document.body.innerHTML = originalContents;
     
-    // Reinitialize the modals after reprinting
-    location.reload();
+    const printWindow = window.open('', '', 'width=600,height=600');
+    printWindow.document.write(`
+        <html>
+        <head>
+            <title>Print Bill</title>
+            <style>
+                body { font-family: Arial, sans-serif; }
+                .bill-container { padding: 20px; border: 1px solid #000; }
+            </style>
+        </head>
+        <body>
+            <div class="bill-container">${printContents}</div>
+            <script>
+                window.onload = function() {
+                    window.print();
+                    setTimeout(() => window.close(), 500);
+                };
+            </script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
 });
+
 
 // Search by lot number
 document.getElementById('searchLot').addEventListener('click', async () => {

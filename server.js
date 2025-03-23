@@ -25,7 +25,7 @@ const createTables = async () => {
       CREATE TABLE IF NOT EXISTS vendors (
         id SERIAL PRIMARY KEY,
         username VARCHAR(50) UNIQUE NOT NULL,
-        password VARCHAR(50) NOT NULL,
+        password VARCHAR(255) NOT NULL,
         entry_charge DECIMAL(10,2),
         hourly_charge DECIMAL(10,2)
       );
@@ -61,28 +61,9 @@ const createTables = async () => {
 createTables();
 
 // Login endpoint
-app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body;
-  try {
-    console.log("Login attempt:", username);
-    const result = await pool.query(
-      'SELECT * FROM vendors WHERE username = $1 AND password = $2',
-      [username, password]
-    );
-    if (result.rows.length > 0) {
-      console.log("Login successful for:", username);
-      res.json({ success: true, vendor: result.rows[0] });
-    } else {
-      console.log("Login failed for:", username);
-      res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({ success: false, message: error.message });
-  }
-});
+const bcrypt = require('bcrypt');
 
-// Registration endpoint
+// Registration endpoint with bcrypt hashing
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
 
@@ -93,15 +74,47 @@ app.post('/api/register', async (req, res) => {
       return res.json({ success: false, message: 'Username already exists' });
     }
 
+    // Hash password before storing
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     // Insert new user
     const result = await pool.query(
       'INSERT INTO vendors (username, password) VALUES ($1, $2) RETURNING *',
-      [username, password]
+      [username, hashedPassword]
     );
 
-    res.json({ success: true, vendor: result.rows[0] });
+    res.json({ success: true, vendor: { id: result.rows[0].id, username: result.rows[0].username } });
   } catch (error) {
     console.error("Registration error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Login endpoint with bcrypt password comparison
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  try {
+    console.log("Login attempt:", username);
+    const result = await pool.query('SELECT * FROM vendors WHERE username = $1', [username]);
+
+    if (result.rows.length > 0) {
+      const vendor = result.rows[0];
+
+      // Compare hashed password
+      const isMatch = await bcrypt.compare(password, vendor.password);
+      if (isMatch) {
+        console.log("Login successful for:", username);
+        res.json({ success: true, vendor: { id: vendor.id, username: vendor.username } });
+      } else {
+        console.log("Login failed for:", username);
+        res.status(401).json({ success: false, message: 'Invalid credentials' });
+      }
+    } else {
+      console.log("Login failed for:", username);
+      res.status(401).json({ success: false, message: 'Invalid credentials' });
+    }
+  } catch (error) {
+    console.error("Login error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });
@@ -177,9 +190,12 @@ app.get('/api/search-car/:carNumber', async (req, res) => {
   try {
     console.log("Searching for car number:", req.params.carNumber);
     const result = await pool.query(
-      'SELECT * FROM parking_entries WHERE car_number = $1 AND status = $2',
-      [req.params.carNumber, 'parked']
-    );
+      `SELECT * FROM parking_entries 
+       WHERE car_number ILIKE $1 AND status = $2 
+       ORDER BY lot_number ASC`,
+      [`%${req.params.carNumber}%`, 'parked']
+  );
+  
     console.log(`Found ${result.rows.length} entries for car number ${req.params.carNumber}`);
     res.json({ success: true, entries: result.rows });
   } catch (error) {
