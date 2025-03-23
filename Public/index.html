@@ -24,6 +24,9 @@
                                 <input type="password" class="form-control" id="password" required>
                             </div>
                             <button type="submit" class="btn btn-primary w-100">Login</button>
+                            <div class="mt-2 text-center">
+                                <button class="btn btn-link" id="showRegister">Don't have an account? Register</button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -31,6 +34,33 @@
         </div>
     </div>
 
+    <!-- Registration Form -->
+    <div id="registerForm" class="container mt-3" style="display: none;">
+        <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+            <div class="card-body">
+                <h3 class="card-title text-center">Register</h3>
+                <form id="register">
+                <div class="mb-3">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-control" id="regUsername" required>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Password</label>
+                    <input type="password" class="form-control" id="regPassword" required>
+                </div>
+                <button type="submit" class="btn btn-success w-100">Register</button>
+                </form>
+                <div class="mt-2 text-center">
+                <button class="btn btn-link" id="showLogin">Already have an account? Login</button>
+                </div>
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+  
     <!-- Main Dashboard -->
     <div id="dashboard" class="container mt-5" style="display: none;">
         <div class="row mb-4">
@@ -38,6 +68,7 @@
                 <h2>Parking Management Dashboard</h2>
                 <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newEntryModal">New Vehicle Entry</button>
                 <button class="btn btn-info" id="viewParkingLot">View Parking Lot</button>
+                <button class="btn btn-warning" id="editCharges">Modify Charges</button>
             </div>
         </div>
 
@@ -116,6 +147,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title">Set Parking Charges</h5>
+                    <p>Please set the entry and hourly charges for different vehicle types.</p>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">

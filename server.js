@@ -7,6 +7,7 @@ const path = require('path');
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
+app.use(express.json());
 
 // Database configuration
 const pool = new Pool({
@@ -77,6 +78,30 @@ app.post('/api/login', async (req, res) => {
     }
   } catch (error) {
     console.error("Login error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+});
+
+// Registration endpoint
+app.post('/api/register', async (req, res) => {
+  const { username, password } = req.body;
+
+  try {
+    // Check if username already exists
+    const checkUser = await pool.query('SELECT * FROM vendors WHERE username = $1', [username]);
+    if (checkUser.rows.length > 0) {
+      return res.json({ success: false, message: 'Username already exists' });
+    }
+
+    // Insert new user
+    const result = await pool.query(
+      'INSERT INTO vendors (username, password) VALUES ($1, $2) RETURNING *',
+      [username, password]
+    );
+
+    res.json({ success: true, vendor: result.rows[0] });
+  } catch (error) {
+    console.error("Registration error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 });

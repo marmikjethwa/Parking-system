@@ -8,6 +8,30 @@ function initializeModals() {
     chargesModal = new bootstrap.Modal(document.getElementById('chargesModal'));
 }
 
+document.getElementById('editCharges').addEventListener('click', () => {
+    if (currentVendor) {
+      document.getElementById('entryCharge').value = currentVendor.entry_charge || '';
+      document.getElementById('hourlyCharge').value = currentVendor.hourly_charge || '';
+      chargesModal.show();
+    } else {
+      alert('Please log in first');
+    }
+  });
+  
+const registerForm = document.getElementById('registerForm');
+const loginForm = document.getElementById('loginForm');
+
+// Toggle between login and register forms
+document.getElementById('showRegister').addEventListener('click', () => {
+  loginForm.style.display = 'none';
+  registerForm.style.display = 'block';
+});
+
+document.getElementById('showLogin').addEventListener('click', () => {
+  registerForm.style.display = 'none';
+  loginForm.style.display = 'block';
+});
+
 // Login form submission
 document.getElementById('login').addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -24,25 +48,57 @@ document.getElementById('login').addEventListener('submit', async (e) => {
 
         if (data.success) {
             currentVendor = data.vendor;
-            document.getElementById('loginForm').style.display = 'none';
+            loginForm.style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
-            
-            // Pre-fill the charges if they exist
-            if (currentVendor.entry_charge !== null) {
-                document.getElementById('entryCharge').value = currentVendor.entry_charge;
+          
+            if (currentVendor.entry_charge === null || currentVendor.hourly_charge === null) {
+              // Show charges modal for first-time user
+              chargesModal.show();
             }
-            if (currentVendor.hourly_charge !== null) {
-                document.getElementById('hourlyCharge').value = currentVendor.hourly_charge;
-            }
-            
-            chargesModal.show();
-        } else {
+          
+            loadParkingData();
+          } else {
             alert('Invalid credentials');
-        }
+          }          
     } catch (error) {
         alert('Login failed: ' + error.message);
     }
 });
+
+// Register form submission
+document.getElementById('register').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('regUsername').value;
+    const password = document.getElementById('regPassword').value;
+  
+    try {
+      const response = await fetch('http://localhost:3000/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+  
+      // If the response isn't JSON, catch the issue early
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${errorText}`);
+      }
+  
+      const data = await response.json();
+  
+      if (data.success) {
+        alert('Registration successful! Please log in.');
+        // Show login form, hide register form
+        registerForm.style.display = 'none';
+        loginForm.style.display = 'block';
+      } else {
+        alert('Registration failed: ' + data.message);
+      }
+    } catch (error) {
+      console.error('Registration failed:', error);
+      alert('Registration failed: ' + error.message);
+    }
+  });
 
 // Charges form submission
 document.getElementById('chargesForm').addEventListener('submit', async (e) => {
