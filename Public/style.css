@@ -1,110 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Fira Sans', sans-serif;
+  font-weight: 400;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #2d2d2d;
-    color: #333;
-  }
-  
-  .modal {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 1000;
-    left: 0; top: 0;
-    width: 100%; height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-  }
-  
-  .modal-content {
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    width: 400px;
-    text-align: left;
-  }
-  
-  .vehicle-entry-form {
-    background: #fff;
-    padding: 30px;
-    border-radius: 8px;
-    width: 400px;
-    margin: 40px auto;
-  }
-  
-  h2 {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  p {
-    color: #777;
-    font-size: 14px;
-    margin-bottom: 20px;
-  }
-  
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .radio-group {
-    display: flex;
-    gap: 20px;
-  }
-  
-  label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-  }
-  
-  input[type="text"],
-  input[type="number"],
-  input[type="tel"],
-  input[type="datetime-local"],
-  select {
-    width: 100%;
-    padding: 10px 15px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-  }
-  
-  input[type="radio"] {
-    margin-right: 8px;
-  }
-  
-  .button-group {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-  
-  .cancel-btn, .save-btn, .add-vehicle-btn {
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-  }
-  
-  .cancel-btn {
-    background: #f1f1f1;
-    color: #333;
-    border: 1px solid #ccc;
-  }
-  
-  .save-btn {
-    background: #000;
-    color: #fff;
-    border: none;
-  }
-  
-  .add-vehicle-btn {
-    width: 100%;
-    background: #000;
-    color: #fff;
-    border: none;
-    padding: 12px;
-  }
-  
+  background-color: #d6e6f2;
+  color: #000a26;
+}
+
+.login_register {
+  width: 70%;
+}
+
+.login_register .card {
+  border-radius: 15px;
+  padding: 20px 10px;
+}
+
+form {
+  padding: 0 25px;
+}
+
+.form-control {
+  border: none;
+  border-bottom: 1.5px solid #000a268a;
+}
+
+.button {
+  margin-top: 10px;
+  padding: 10px;
+  font-size: medium;
+  background-color: #0f52ba;
+}
+
+.button:hover{
+  background-color: #074fba;
+}
+
+.solo {
+  background-color: #0f52ba; 
+  color: white;
+}
+#newVehicleEntry {
+  background-color: #0f52ba; 
+  color: white; 
+  border: none;
+  margin-right: 20px;
+}
+
+#viewParkingLot {
+  background-color: #0f76ba;
+  color: white; 
+  border: none;
+}
+
+.switch {
+  text-decoration: none;
+  color: #0f52ba;
+  margin-top: 10px;
+  transition: 3s;
+}
+
+.switch:hover{
+  color: rgb(22, 71, 145);
+  text-decoration: underline;
+  transition: 3s;
+}
+
+.search {
+  background-color: #0f52ba;
+  color: white;
+  border: none;
+  padding: 5px 15px;
+}
+
+.search:hover{
+  background-color: #1c5ab6;
+}
+
+table th {
+  border-bottom: 1px solid #000a266e;
+}
+
+table{
+  border: 1px solid #000a266e;
+  text-align: center;
+  color: #000a26;
+}
+
+.btn-danger {
+  padding: 5px 15px;
+}

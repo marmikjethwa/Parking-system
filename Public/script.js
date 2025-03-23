@@ -8,16 +8,6 @@ function initializeModals() {
     chargesModal = new bootstrap.Modal(document.getElementById('chargesModal'));
 }
 
-document.getElementById('editCharges').addEventListener('click', () => {
-    if (currentVendor) {
-      document.getElementById('entryCharge').value = currentVendor.entry_charge || '';
-      document.getElementById('hourlyCharge').value = currentVendor.hourly_charge || '';
-      chargesModal.show();
-    } else {
-      alert('Please log in first');
-    }
-  });
-  
 const registerForm = document.getElementById('registerForm');
 const loginForm = document.getElementById('loginForm');
 
@@ -48,18 +38,19 @@ document.getElementById('login').addEventListener('submit', async (e) => {
 
         if (data.success) {
             currentVendor = data.vendor;
-            loginForm.style.display = 'none';
+            document.getElementById('loginForm').style.display = 'none';
             document.getElementById('dashboard').style.display = 'block';
           
-            if (currentVendor.entry_charge === null || currentVendor.hourly_charge === null) {
-              // Show charges modal for first-time user
-              chargesModal.show();
+            if (currentVendor.entry_charge !== null) {
+                document.getElementById('entryCharge').value = currentVendor.entry_charge;
             }
-          
-            loadParkingData();
-          } else {
+            if (currentVendor.hourly_charge !== null) {
+                document.getElementById('hourlyCharge').value = currentVendor.hourly_charge;
+            }
+            chargesModal.show();
+        } else {
             alert('Invalid credentials');
-          }          
+        }          
     } catch (error) {
         alert('Login failed: ' + error.message);
     }
