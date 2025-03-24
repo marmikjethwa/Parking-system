@@ -8,7 +8,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
 app.use(express.json());
-
+app.use(express.urlencoded({ extended: true }));
 // Database configuration
 const pool = new Pool({
   user: 'postgres',

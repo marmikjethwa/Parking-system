@@ -359,3 +359,109 @@ document.addEventListener('DOMContentLoaded', function() {
         loadParkingData();
     }
 });
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+      navigator.serviceWorker.register("/sw.js").then((registration) => {
+        console.log("Service Worker registered:", registration);
+      }).catch((error) => {
+        console.log("Service Worker registration failed:", error);
+      });
+    });
+  }
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(registration => {
+          console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          
+          // Set up push notification subscription if supported
+          setupPushNotifications(registration);
+        })
+        .catch(error => {
+          console.error('ServiceWorker registration failed: ', error);
+        });
+    });
+  }
+  
+  // Setup push notifications
+  function setupPushNotifications(registration) {
+    // Check if push is supported
+    if (!('PushManager' in window)) {
+      console.log('Push notifications not supported');
+      return;
+    }
+    
+    // Request permission
+    Notification.requestPermission().then(permission => {
+      if (permission !== 'granted') {
+        console.log('Notification permission not granted');
+        return;
+      }
+      
+      // Subscribe user to push
+      const applicationServerKey = urlBase64ToUint8Array(
+        'YOUR_PUBLIC_VAPID_KEY' // You'll need to replace this with your actual VAPID key
+      );
+      
+      registration.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: applicationServerKey
+      })
+      .then(subscription => {
+        // Send subscription to your server
+        console.log('User subscribed to push notifications');
+        
+        // You would typically send this subscription to your server
+        // fetch('/api/subscriptions', {
+        //   method: 'POST',
+        //   headers: { 'Content-Type': 'application/json' },
+        //   body: JSON.stringify(subscription)
+        // });
+      })
+      .catch(error => {
+        console.error('Failed to subscribe to push: ', error);
+      });
+    });
+  }
+  
+  // Helper function to convert base64 string to Uint8Array
+  function urlBase64ToUint8Array(base64String) {
+    const padding = '='.repeat((4 - base64String.length % 4) % 4);
+    const base64 = (base64String + padding)
+      .replace(/-/g, '+')
+      .replace(/_/g, '/');
+    
+    const rawData = window.atob(base64);
+    const outputArray = new Uint8Array(rawData.length);
+    
+    for (let i = 0; i < rawData.length; ++i) {
+      outputArray[i] = rawData.charCodeAt(i);
+    }
+    
+    return outputArray;
+  }
+  
+  // Handle background sync for offline operations
+  function registerSyncForOfflineOperations() {
+    if ('serviceWorker' in navigator && 'SyncManager' in window) {
+      navigator.serviceWorker.ready
+        .then(registration => {
+          registration.sync.register('sync-parking-operations')
+            .then(() => {
+              console.log('Background sync registered for offline operations');
+            })
+            .catch(error => {
+              console.error('Background sync registration failed:', error);
+            });
+        });
+    } else {
+      console.log('Background sync not supported');
+      // Implement fallback here
+    }
+  }
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/service-worker.js")
+      .then(() => console.log("Service Worker registered"))
+      .catch((error) => console.log("Service Worker registration failed:", error));
+  }
+  
