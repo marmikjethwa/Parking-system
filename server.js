@@ -62,13 +62,13 @@ createTables();
 
 // Login endpoint
 const bcrypt = require('bcrypt');
-
+const RECAPTCHA_SECRET = "6Lc3ANAqAAAAAJBj1ajLij_TGsdVBalaLERJieGd";
+app.use(express.json())
 // Registration endpoint with bcrypt hashing
 app.post('/api/register', async (req, res) => {
   const { username, password } = req.body;
-
-  try {
-    // Check if username already exists
+  try{
+  // Check if username already exists
     const checkUser = await pool.query('SELECT * FROM vendors WHERE username = $1', [username]);
     if (checkUser.rows.length > 0) {
       return res.json({ success: false, message: 'Username already exists' });
@@ -92,8 +92,17 @@ app.post('/api/register', async (req, res) => {
 
 // Login endpoint with bcrypt password comparison
 app.post('/api/login', async (req, res) => {
-  const { username, password } = req.body;
+  const { username, password,recaptchaResponse } = req.body;
   try {
+    const recaptchaVerify = await fetch(
+      `https://www.google.com/recaptcha/api/siteverify?secret=${RECAPTCHA_SECRET}&response=${recaptchaResponse}`,
+      { method: "POST" }
+  );
+
+  const recaptchaData = await recaptchaVerify.json();
+  if (!recaptchaData.success) {
+      return res.status(400).json({ error: "reCAPTCHA verification failed" });
+  }
     console.log("Login attempt:", username);
     const result = await pool.query('SELECT * FROM vendors WHERE username = $1', [username]);
 

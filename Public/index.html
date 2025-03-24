@@ -24,6 +24,9 @@
                                 <label class="form-label">Password</label>
                                 <input type="password" class="form-control" id="password" required>
                             </div>
+                            <div class="recaptcha">
+                                <div class="g-recaptcha" data-sitekey="6Lc3ANAqAAAAACmeoqkrST2c3RmitX7GNqvEpOiz"></div>
+                            </div>
                             <button type="submit" class="button btn btn-primary w-100">Login</button>
                             <div class="mt-2 text-center">
                                 <button class="switch btn btn-link" id="showRegister">Don't have an account? Register</button>
@@ -34,7 +37,8 @@
             </div>
         </div>
     </div>
-
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+        
     <!-- Registration Form -->
     <div id="registerForm" class="login_register container mt-5" style="display: none;">
         <div class="row justify-content-center">
@@ -61,7 +65,7 @@
         </div>
         </div>
     </div>
-  
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <!-- Main Dashboard -->
     <div id="dashboard" class="container mt-5" style="display: none;">
         <div class="row mb-4">

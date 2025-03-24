@@ -27,12 +27,16 @@ document.getElementById('login').addEventListener('submit', async (e) => {
     e.preventDefault();
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
-
+    const recaptchaResponse = grecaptcha.getResponse();
+    if (!recaptchaResponse) {
+        alert("Please complete the reCAPTCHA.");
+        return;
+    }
     try {
         const response = await fetch('/api/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
+            body: JSON.stringify({ username, password, recaptchaResponse })
         });
         const data = await response.json();
 
@@ -63,19 +67,19 @@ document.getElementById('register').addEventListener('submit', async (e) => {
     const password = document.getElementById('regPassword').value;
   
     try {
-      const response = await fetch('http://localhost:3000/api/register', {
+      const response = await fetch('api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ username, password })
+        body: JSON.stringify({ username, password})
       });
-  
+  const data = await response.json();
       // If the response isn't JSON, catch the issue early
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Server error: ${errorText}`);
       }
   
-      const data = await response.json();
+      
   
       if (data.success) {
         alert('Registration successful! Please log in.');
