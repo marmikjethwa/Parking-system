@@ -58,6 +58,7 @@ document.getElementById('login').addEventListener('submit', async (e) => {
     } catch (error) {
         alert('Login failed: ' + error.message);
     }
+    
 });
 
 // Register form submission
@@ -73,7 +74,7 @@ document.getElementById('register').addEventListener('submit', async (e) => {
         body: JSON.stringify({ username, password})
       });
   const data = await response.json();
-      // If the response isn't JSON, catch the issue early
+
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Server error: ${errorText}`);
@@ -83,7 +84,7 @@ document.getElementById('register').addEventListener('submit', async (e) => {
   
       if (data.success) {
         alert('Registration successful! Please log in.');
-        // Show login form, hide register form
+    
         registerForm.style.display = 'none';
         loginForm.style.display = 'block';
       } else {
@@ -163,6 +164,11 @@ document.getElementById('entryForm').addEventListener('submit', async (e) => {
         alert('Failed to add vehicle: ' + error.message);
     }
 });
+document.getElementById("logout").addEventListener("click", function () {
+    localStorage.removeItem("loggedIn"); // Clear login state
+    location.reload(true); // Hard refresh (Ctrl + Shift + R equivalent)
+});
+
 
 // Load parking data
 async function loadParkingData() {
@@ -212,15 +218,14 @@ async function exitVehicle(entryId) {
 
         if (data.success) {
             const bill = data.bill;
-
-            // Update bill content
+        //creatbill
             document.getElementById('billContent').innerHTML = `
                 <div class="bill-details p-3">
                     <h1 text-allign:center>QuickPark</h1>
                     <h4 class="text-center mb-4">Parking Bill</h4>
                     <div class="border-bottom mb-3">
                         <p><strong>Car Number:</strong> ${bill.car_number}</p>
-                        <p><strong>Car Name:</strong> ${bill.car_name}</p>
+                        <p><strong>Owner Name:</strong> ${bill.car_name}</p>
                         <p><strong>Mobile Number:</strong> ${bill.mobile_number}</p>
                     </div>
                     <div class="mb-3">
@@ -253,7 +258,7 @@ async function exitVehicle(entryId) {
 document.getElementById('printBill').addEventListener('click', () => {
     const printContents = document.getElementById('billContent').innerHTML;
     
-    const printWindow = window.open('', '', 'width=600,height=600');
+    const printWindow = window.open('', '', 'width=400,height=600');
     printWindow.document.write(`
         <html>
         <head>

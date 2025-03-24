@@ -52,9 +52,9 @@ const createTables = async () => {
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       );
     `);
-    console.log("✅ Tables created successfully");
+    console.log(" Tables created successfully");
   } catch (err) {
-    console.error("❌ Error creating tables:", err);
+    console.error(" Error creating tables:", err);
   }
 };
 

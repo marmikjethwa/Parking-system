@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Login Form -->
+    <div></div>
     <div id="loginForm" class="login_register container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-6">
@@ -38,8 +38,7 @@
         </div>
     </div>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-        
-    <!-- Registration Form -->
+  
     <div id="registerForm" class="login_register container mt-5" style="display: none;">
         <div class="row justify-content-center">
         <div class="col-md-6">
@@ -66,11 +65,14 @@
         </div>
     </div>
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-    <!-- Main Dashboard -->
+
     <div id="dashboard" class="container mt-5" style="display: none;">
         <div class="row mb-4">
             <div class="col">
-                <h1 style="margin-bottom: 20px;">Parking Management Dashboard</h1>
+                <h1 style="margin-bottom: 20px;">QuickParK</h1> 
+                <div class="col text-end">
+                    <button class="btn btn-danger" id="logout">Logout</button>
+                </div>                                                                                                                               </h1>
                 <button class="btn btn-primary" id="newVehicleEntry" data-bs-toggle="modal" data-bs-target="#newEntryModal">New Vehicle Entry</button>
                 <button class="btn btn-info" id="viewParkingLot">View Parking Lot</button>
             </div>
@@ -99,7 +101,7 @@
                             <tr>
                                 <th>Lot No.</th>
                                 <th>Car No.</th>
-                                <th>Car Name</th>
+                                <th>Owner Name</th>
                                 <th>Mobile</th>
                                 <th>Entry Time</th>
                                 <th>Action</th>
@@ -112,7 +114,7 @@
         </div>
     </div>
 
-    <!-- New Entry Modal -->
+
     <div class="modal fade" id="newEntryModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -131,7 +133,7 @@
                             <input type="text" class="form-control" id="carNumber" required>
                         </div>
                         <div class="mb-3">
-                            <label class="form-label">Car Name</label>
+                            <label class="form-label">Owner Name</label>
                             <input type="text" class="form-control" id="carName" required>
                         </div>
                         <div class="mb-3">
@@ -145,7 +147,6 @@
         </div>
     </div>
 
-    <!-- Charges Modal -->
     <div class="modal fade" id="chargesModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -170,7 +171,6 @@
         </div>
     </div>
 
-    <!-- Bill Modal -->
     <div class="modal fade" id="billModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -179,7 +179,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body" id="billContent">
-                    <!-- Bill content will be inserted here -->
+                  
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary solo" id="printBill">Print Bill</button>
