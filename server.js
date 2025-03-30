@@ -13,7 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 const pool = new Pool({
   user: 'postgres',
   host: 'localhost',
-  database: 'parking_db',
+  database: 'db password",
   password: 'marmiksj',
   port: 5432,
 });
@@ -62,7 +62,7 @@ createTables();
 
 // Login endpoint
 const bcrypt = require('bcrypt');
-const RECAPTCHA_SECRET = "6Lc3ANAqAAAAAJBj1ajLij_TGsdVBalaLERJieGd";
+const RECAPTCHA_SECRET = "googlerecaptchv2key";
 app.use(express.json())
 // Registration endpoint with bcrypt hashing
 app.post('/api/register', async (req, res) => {
